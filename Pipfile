@@ -10,6 +10,7 @@ python-telegram-bot = "*"
 schedule = "*"
 apscheduler = "*"
 requests = "*"
+googlemaps = "*"
 
 [requires]
 python_version = "3.7"
