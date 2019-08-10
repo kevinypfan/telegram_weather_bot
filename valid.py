@@ -9,9 +9,10 @@ def check_input(input_str):
     for (index, word) in enumerate(origin_data):
         for i in input_str:
             try:
-                if i == '台':
+                if i == '台' and '臺' in word:
                     check_list[index].append('臺')
-                check_list[index].append(word.index(i))
+                else:
+                    check_list[index].append(word.index(i))
             except:
                 pass
     ls_a = [len(c) for c in check_list]

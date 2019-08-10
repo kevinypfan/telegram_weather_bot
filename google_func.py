@@ -23,9 +23,10 @@ def search_area(latlng):
                 set_data.add(conponent['long_name'])
             if 'administrative_area_level_3' in conponent['types']:
                 set_data.add(conponent['long_name'])
-    if len(area & set_data) == 0:
+    print(len(area & set_data))
+    if len(area & set_data) == 0 and len(area_simple & set_data) > 0:
         return map_dict[list(area_simple & set_data)[0]]
-    elif len(area & set_data) == 0:
+    elif len(area & set_data) == 0 and len(area_simple & set_data) == 0:
         return None
     else:
         return list(area & set_data)[0]
