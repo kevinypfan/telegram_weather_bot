@@ -37,6 +37,7 @@ def request_choose(locate, day):
 
 
 def get_request(locate, update):
+    print('here')
     request = [1, 1, 1, 1, 1]
     result = weather_api.get_data(locate, request)
     start_time = result[0]['startTime']
@@ -63,7 +64,7 @@ def locate_sentence(bot, update):  # receive messege
         update.message.reply_text("請重新輸入！")
     else:
         update.message.reply_text('我們只支援台灣喔！還是你是要以下選擇', reply_markup=InlineKeyboardMarkup([[
-            InlineKeyboardButton(random.choice(emoji)+ ' ' + locate, callback_data=locate) for locate in possiple_list
+            InlineKeyboardButton(random.choice(emoji)+ ' ' + locate, callback_data='msg-'+locate) for locate in possiple_list
         ]]))
 
 
@@ -134,15 +135,15 @@ button_map = {
 
 
 def callback_query_handler(bot, update):
+    callback_data = update.callback_query.data.split('-')
     print(update.callback_query.data)
-    if len(update.callback_query.data) == 3:
+    if callback_data[0] == 'msg':
         update.callback_query.edit_message_text(
-            request_choose(update.callback_query.data, 1))
+            request_choose(callback_data[1], 1))
         update.callback_query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup([[
-            InlineKeyboardButton(time, callback_data='{}-{}'.format(index, update.callback_query.data)) for index, time in button_map['1']
+            InlineKeyboardButton(time, callback_data='{}-{}'.format(index, callback_data[1])) for index, time in button_map['1']
         ]]))
     else:
-        callback_data = update.callback_query.data.split('-')
         update.callback_query.edit_message_text(
             request_choose(callback_data[1], int(callback_data[0])))
         update.callback_query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup([[
@@ -150,7 +151,7 @@ def callback_query_handler(bot, update):
         ]]))
 
 
-updater = Updater('936215806:AAEbl8MOVWGTW5AONbDWLSkiQQfRFwNKm6g')
+updater = Updater('759998134:AAFQ8soqpmW6sVntS1QWdgj9sdVXuVllLsM')
 
 updater.dispatcher.add_handler(
     MessageHandler(Filters.location, location_handler))

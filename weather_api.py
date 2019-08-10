@@ -39,4 +39,4 @@ def get_data(locationName, usr_require):
     return [Wx, PoP, MinT, Cl, MaxT]
 
 
-# print(get_request('宜蘭縣'))  # <<<==  get data here
+# print(get_data('新竹縣', [1, 1, 1, 1, 1]))  # <<<==  get data here
