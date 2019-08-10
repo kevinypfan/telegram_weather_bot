@@ -1,6 +1,8 @@
 import weather_api
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+from telegram import InlineKeyboardMarkup, InlineKeyboardButton
 from apscheduler.schedulers.blocking import BlockingScheduler
+from google_func import search_area
 import schedule
 import logging
 logging.basicConfig()
@@ -13,18 +15,36 @@ user_location = {}
 # 12嘉義縣 13臺南市 14高雄市 15屏東縣 16臺東縣 17花蓮縣 18宜蘭縣 19澎湖縣 20金門縣 21連江縣
 
 
+def request_choose(locate, day):
+    request = [day for i in range(5)]
+    result = weather_api.get_data(locate, request)
+    start_time = result[0]['startTime']
+    end_time = result[0]['endTime']
+    weather_now = result[0]['parameter']['parameterName']
+    weather_index = result[0]['parameter']['parameterValue']
+    raining_rate = result[1]['parameter']['parameterName']
+    lowest_temp = result[2]['parameter']['parameterName']
+    feeling = result[3]['parameter']['parameterName']
+    highest_temp = result[4]['parameter']['parameterName']
+    return (locate+"的天氣爲"+weather_now+"\n降雨機率: "+raining_rate +
+            "%\n最低溫度: "+lowest_temp+"C 最高溫度: "+highest_temp+"C \n舒適度爲"+feeling)
+
+
 def get_request(locate, update):
     request = [1, 1, 1, 1, 1]
     result = weather_api.get_data(locate, request)
-    print(result[1])
-    weather_now = result[0][0]['parameter']['parameterName']
-    weather_index = result[0][0]['parameter']['parameterValue']
-    raining_rate = result[1][0]['parameter']['parameterName']
-    lowest_temp = result[2][0]['parameter']['parameterName']
-    feeling = result[3][0]['parameter']['parameterName']
-    highest_temp = result[4][0]['parameter']['parameterName']
-    update.message.reply_text(locate+"現在的天氣爲"+weather_now+"\n降雨機率: "+raining_rate +
-                              "%\n最低溫度: "+lowest_temp+"C 最高溫度: "+highest_temp+"C \n舒適度爲"+feeling)
+    start_time = result[0]['startTime']
+    end_time = result[0]['endTime']
+    weather_now = result[0]['parameter']['parameterName']
+    weather_index = result[0]['parameter']['parameterValue']
+    raining_rate = result[1]['parameter']['parameterName']
+    lowest_temp = result[2]['parameter']['parameterName']
+    feeling = result[3]['parameter']['parameterName']
+    highest_temp = result[4]['parameter']['parameterName']
+    update.message.reply_text(locate+"的天氣爲"+weather_now+"\n降雨機率: "+raining_rate +
+                              "%\n最低溫度: "+lowest_temp+"C 最高溫度: "+highest_temp+"C \n舒適度爲"+feeling, reply_markup=InlineKeyboardMarkup([[
+                                  InlineKeyboardButton(time, callback_data='{}-{}'.format(index, locate)) for index, time in [(2, '12小時後'), (3, '24小時後')]
+                              ]]))
 
 
 def locate_sentence(bot, update):  # receive messege
@@ -32,7 +52,7 @@ def locate_sentence(bot, update):  # receive messege
     locate = update.message.text.strip()
 
     if locate in type_list:
-        result = get_request(locate, update)
+        get_request(locate, update)
     else:
         update.message.reply_text('靠你確定你說的是臺灣嗎？')
 
@@ -40,7 +60,7 @@ def locate_sentence(bot, update):  # receive messege
 def notification(location, update):
     def hello():
         update.message.reply_text("個人天氣通知")
-        r = get_request(location, update)
+        get_request(location, update)
 
     # call_request
     return hello
@@ -77,7 +97,34 @@ def set_location(bot, update):
         update.message.reply_text('你是住哪裡啦 媽的')
 
 
-updater = Updater('936215806:AAEbl8MOVWGTW5AONbDWLSkiQQfRFwNKm6g')
+def location_handler(bot, update):
+    latlng = (update['message']['location']
+              ['latitude'], update['message']['location']['longitude'])
+    get_request(search_area(latlng), update)
+
+
+button_map = {
+    '1': [(2, '12小時後'), (3, '24小時後')],
+    '2': [(1, '12小時前'), (3, '12小時後')],
+    '3': [(1, '24小時前'), (2, '12小時前')],
+}
+
+
+def callback_query_handler(bot, update):
+    print(update.callback_query.data)
+    callback_data = update.callback_query.data.split('-')
+    update.callback_query.edit_message_text(
+        request_choose(callback_data[1], int(callback_data[0])))
+    update.callback_query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup([[
+        InlineKeyboardButton(time, callback_data='{}-{}'.format(index, callback_data[1])) for index, time in button_map[callback_data[0]]
+    ]]))
+
+
+updater = Updater('759998134:AAFQ8soqpmW6sVntS1QWdgj9sdVXuVllLsM')
+
+updater.dispatcher.add_handler(
+    MessageHandler(Filters.location, location_handler))
+updater.dispatcher.add_handler(CallbackQueryHandler(callback_query_handler))
 
 updater.dispatcher.add_handler(MessageHandler(Filters.text, locate_sentence))
 updater.dispatcher.add_handler(CommandHandler('notify', set_notify))
