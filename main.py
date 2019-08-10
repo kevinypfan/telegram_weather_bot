@@ -105,15 +105,30 @@ def schedule(location, update, time):
     sched.start()
 
 
-def set_location(bot, update):
-    location = update.message.text.strip()[5:]
-    userid = update.message.from_user.id
-    if location in type_list:
-        update.message.reply_text('已更變居住區域: '+location)
-        user_location[userid] = location
+# def set_location(bot, update):
+#     location = update.message.text.strip()[5:]
+#     userid = update.message.from_user.id
+#     if location in type_list:
+#         update.message.reply_text('已更變居住區域: '+location)
+#         user_location[userid] = location
 
+#     else:
+#         update.message.reply_text('目前本系統只支援台灣喔！')
+
+def set_location(bot, update):
+    possiple_list = check_input(update.message.text.strip()[5:])
+    userid = update.message.from_user.id
+    if len(possiple_list) == 1:
+        user_location[userid] = possiple_list[0]
+        update.message.reply_text('已更變居住區域: ' + possiple_list[0])
+    elif len(possiple_list) > 5:
+        update.message.reply_text("請重新輸入！")
     else:
-        update.message.reply_text('目前本系統只支援台灣喔！')
+        update.message.reply_text('目前我們只支持台灣喔！還是您是要...', reply_markup=InlineKeyboardMarkup([[
+            InlineKeyboardButton(random.choice(emoji)+ ' ' + locate, callback_data='set-'+locate+'-userid') for locate in possiple_list
+        ]]))
+
+
 
 
 def location_handler(bot, update):
@@ -143,6 +158,9 @@ def callback_query_handler(bot, update):
         update.callback_query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup([[
             InlineKeyboardButton(time, callback_data='{}-{}'.format(index, callback_data[1])) for index, time in button_map['1']
         ]]))
+    elif callback_data[0] == 'set':
+        user_location[callback_data[2]] = callback_data[1]
+        update.callback_query.edit_message_text('已更變居住區域: ' + callback_data[1])
     else:
         update.callback_query.edit_message_text(
             request_choose(callback_data[1], int(callback_data[0])))
