@@ -50,12 +50,14 @@ def set_notify(bot,update):
         
     print(update.message.text.strip())
     time = update.message.text.strip()[8:]
-    print(time)    
-    location = user_location[userid]
-    update.message.reply_text('你的居住地爲'+location+', 設定通知時間爲'+time)
-    sche_thread.append(threading.Thread(target=schedule,args=(location,update,time,)))
-    sche_thread[-1].start()
-    
+    print(time)
+    if int(time[:2])>=0 and int(time[:2])<=23 and int(time[3:])>=0 and int(time[3:])<60:
+        location = user_location[userid]
+        update.message.reply_text('你的居住地爲'+location+', 設定通知時間爲'+time)
+        sche_thread.append(threading.Thread(target=schedule,args=(location,update,time,)))
+        sche_thread[-1].start()
+    else:
+        update.message.reply_text("Time wrong")
     
  #   schedule.every().day.at(time).do(notification(location,update))
 def schedule(location,update,time):
@@ -67,8 +69,7 @@ def set_location(bot,update):
     location = update.message.text.strip()[5:]
     userid=update.message.from_user.id
     if location in type_list:
-        if userid in user_location:
-            update.message.reply_text('已更變居住區域')
+        update.message.reply_text('已更變居住區域: '+location)
         user_location[userid]=location
         
     else:
