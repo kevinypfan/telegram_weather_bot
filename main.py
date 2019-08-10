@@ -1,4 +1,5 @@
 from telegram.ext import Updater, CommandHandler,MessageHandler,Filters
+from apscheduler.schedulers.blocking import BlockingScheduler
 import schedule
 import logging
 
@@ -18,10 +19,10 @@ def locate_sentence(bot, update):#receive messege
     if locate in type_list:
         #call_request
         pass
-def hello():
-    update.message.reply_text('Miku is real')
 
 def notification(location,update):
+    def hello():
+        update.message.reply_text('Miku is real')
     #call_request
     return hello
 
@@ -36,7 +37,10 @@ def set_notify(bot,update):
     print(time)    
     location = user_location[userid]
     update.message.reply_text('你的居住地爲'+location+', 設定通知時間爲'+time)
-    schedule.every().day.at(time).do(notification(location,update))
+    sched = BlockingScheduler()
+    sched.add_job(func=notification(location,update),trigger='cron',hour=time[:2],minute=time[3:])
+    sched.start()
+ #   schedule.every().day.at(time).do(notification(location,update))
 
 def set_location(bot,update):
     location = update.message.text.strip()[5:]

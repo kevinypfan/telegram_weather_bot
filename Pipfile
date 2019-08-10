@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 python-telegram-bot = "*"
 schedule = "*"
+apscheduler = "*"
 
 [requires]
 python_version = "3.7"
