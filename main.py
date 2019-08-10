@@ -128,7 +128,7 @@ def callback_query_handler(bot, update):
     ]]))
 
 
-updater = Updater('759998134:AAFQ8soqpmW6sVntS1QWdgj9sdVXuVllLsM')
+updater = Updater('936215806:AAEbl8MOVWGTW5AONbDWLSkiQQfRFwNKm6g')
 
 updater.dispatcher.add_handler(
     MessageHandler(Filters.location, location_handler))
