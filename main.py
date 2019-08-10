@@ -2,12 +2,11 @@ from telegram.ext import Updater, CommandHandler,MessageHandler,Filters
 from apscheduler.schedulers.blocking import BlockingScheduler
 import schedule
 import logging
-
 logging.basicConfig()
-#import weather_api
+import weather_api
 all_type_list={}
-type_list=['基隆市','臺北市','新北市','桃園縣','新竹市','新竹縣','苗栗縣','臺中市','彰化縣','南投縣','雲林縣','嘉義市','嘉義縣','臺南市','高雄市','屏東縣','臺東縣','花蓮縣','宜蘭縣','澎湖縣','金門縣','連江縣'] 
-user_location={}
+type_list = ['基隆市','臺北市','新北市','桃園縣','新竹市','新竹縣','苗栗縣','臺中市','彰化縣','南投縣','雲林縣','嘉義市','嘉義縣','臺南市','高雄市','屏東縣','臺東縣','花蓮縣','宜蘭縣','澎湖縣','金門縣','連江縣'] 
+user_location = {}
 
 #0基隆市 1台北市 2新北市 3桃園縣 4新竹市 5新竹縣 6苗栗縣 7臺中市 8彰化縣 9南投縣 10雲林縣 11嘉義市
 #12嘉義縣 13臺南市 14高雄市 15屏東縣 16臺東縣 17花蓮縣 18宜蘭縣 19澎湖縣 20金門縣 21連江縣 
@@ -15,10 +14,11 @@ user_location={}
 def locate_sentence(bot, update):#receive messege
     
     locate = update.message.text.strip()
-    
+    request=[1,1,1,1,1]
     if locate in type_list:
-        #call_request
-        pass
+        result = weather_api.get_data(locate,request)
+        weather_now = result[0]['parameter']['parameterValue']
+        raining_rate = result[1]
 
 def notification(location,update):
     def hello():

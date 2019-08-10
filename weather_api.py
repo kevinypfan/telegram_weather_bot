@@ -2,7 +2,7 @@
 import requests as req
 import json 
 
-def getDATA(locationName,usr_require):
+def get_data(locationName,usr_require):
     #get user require's api_id from db
     #select the part of need
     global maindata
@@ -16,5 +16,5 @@ def getDATA(locationName,usr_require):
     Cl=(maindata[3]['time'][0:usr_require[3]])
     MaxT=(maindata[4]['time'][0:usr_require[4]])
     return [Wx,PoP,MinT,Cl,MaxT]
-#getDATA(locationName,AuthorizationKey,[2,2,2,2,2])#    <<<==  get data here
+#get_data(locationName,AuthorizationKey,[2,2,2,2,2])#    <<<==  get data here
 
