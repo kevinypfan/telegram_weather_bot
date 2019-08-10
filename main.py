@@ -54,6 +54,7 @@ def set_notify(bot,update):
     sched = BlockingScheduler()
     sched.add_job(func=notification(location,update),trigger='cron',hour=time[:2],minute=time[3:])
     sched.start()
+    
  #   schedule.every().day.at(time).do(notification(location,update))
 
 def set_location(bot,update):
