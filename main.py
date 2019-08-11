@@ -117,7 +117,7 @@ def callback_query_handler(bot, update):
             InlineKeyboardButton(time, callback_data='{}-{}'.format(index, callback_data[1])) for index, time in button_map[callback_data[0]]
         ]]))
 def helping(bot,update):
-    update.message.reply_text('歡迎使用Weather Now 機器人\n請直接輸入你所在的地區\nEx:臺北市，支援缺字搜尋\n或是透過Telegram傳送你所在的位置\nBot會自動判斷你所在的縣市\n\n 還可以設定每天推播天氣訊息\n透過 /set 地名 設定居住區域 \n/notify HH:MM 設定推播時間')
+    update.message.reply_text('歡迎使用Weather Now 專業氣象推播機器人!\n請直接輸入欲查詢的縣市名稱或傳送位置資料即可立即取得最新氣象資訊!\n訊息自動推播功能:\n您可以使用/set 縣市 指令來綁定位置，再使用/notify HH:MM 設定推播時間，機器人便會自動通報氣象。\n感謝您使用本產品!若在使用上有任何問題，歡迎使用/help 指令查看說明。')
 updater = Updater('936215806:AAEbl8MOVWGTW5AONbDWLSkiQQfRFwNKm6g')
 updater.dispatcher.add_handler(
     MessageHandler(Filters.location, location_handler))
