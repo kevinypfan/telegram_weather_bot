@@ -170,7 +170,7 @@ def helping(bot,update):
     update.message.reply_text('1. 打縣市名可以知道當地的:天氣狀況、降雨機率、最低溫度、最高溫度、舒適度,如果沒有打正確的地名,就會根據你打的字選幾個有可能的縣市\n2. 打出縣市名後可以選擇你想要知道的時間 可以選擇時間\n3. /set 可以設定推播的居住區域(ex: /set 新竹市)\n4. /notify 可以設定推播時間(ex: /notify 09:87)')
 
 
-updater = Updater('759998134:AAFQ8soqpmW6sVntS1QWdgj9sdVXuVllLsM')
+updater = Updater('936215806:AAEbl8MOVWGTW5AONbDWLSkiQQfRFwNKm6g')
 
 updater.dispatcher.add_handler(
     MessageHandler(Filters.location, location_handler))
