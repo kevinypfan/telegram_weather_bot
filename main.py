@@ -5,10 +5,10 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from google_func import search_area
 from valid import check_input
 import random
-import logging
+# import logging
 import threading
 import weather_api
-logging.basicConfig()
+# logging.basicConfig()
 
 
 all_type_list = {}
@@ -141,13 +141,11 @@ def location_handler(bot, update):
     else:
         get_request(search_area(latlng), update)
 
-
 button_map = {
     '1': [(2, '12小時後'), (3, '24小時後')],
     '2': [(1, '12小時前'), (3, '12小時後')],
     '3': [(1, '24小時前'), (2, '12小時前')],
 }
-
 
 def callback_query_handler(bot, update):
     callback_data = update.callback_query.data.split('-')
@@ -168,6 +166,11 @@ def callback_query_handler(bot, update):
         update.callback_query.edit_message_reply_markup(reply_markup=InlineKeyboardMarkup([[
             InlineKeyboardButton(time, callback_data='{}-{}'.format(index, callback_data[1])) for index, time in button_map[callback_data[0]]
         ]]))
+def helping(bot,update):
+    update.message.reply_text('1. 打縣市名可以知道當地的:天氣狀況、降雨機率、最低溫度、最高溫度、舒適度,如果沒有打正確的地名,就會根據你打的字選幾個有可能的縣市
+2. 打出縣市名後可以選擇你想要知道的時間 可以選擇時間
+3. /set 可以設定推播的居住區域(ex: /set 新竹市)
+4. /notify 可以設定推播時間(ex: /notify 04:24)')
 
 
 updater = Updater('759998134:AAFQ8soqpmW6sVntS1QWdgj9sdVXuVllLsM')
@@ -179,6 +182,7 @@ updater.dispatcher.add_handler(CallbackQueryHandler(callback_query_handler))
 updater.dispatcher.add_handler(MessageHandler(Filters.text, locate_sentence))
 updater.dispatcher.add_handler(CommandHandler('notify', set_notify))
 updater.dispatcher.add_handler(CommandHandler('set', set_location))
+updater.dispatcher.add_handler(CommandHandler('help', helping))
+updater.dispatcher.add_handler(CommandHandler('start', helping))
 updater.start_polling()
-
 updater.idle()
