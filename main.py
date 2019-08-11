@@ -170,7 +170,7 @@ def helping(bot,update):
     update.message.reply_text('歡迎使用Weather Now 機器人\n請直接輸入你所在的地區\nEx:臺北市，支援缺字搜尋\n或是透過Telegram傳送你所在的位置\nBot會自動判斷你所在的縣市\n\n 還可以設定每天推播天氣訊息\n透過 /set 地名 設定居住區域 /notify HH:MM 設定推播時間')
 
 
-updater = Updater('759998134:AAFQ8soqpmW6sVntS1QWdgj9sdVXuVllLsM')
+updater = Updater('936215806:AAEbl8MOVWGTW5AONbDWLSkiQQfRFwNKm6g')
 
 updater.dispatcher.add_handler(
     MessageHandler(Filters.location, location_handler))
