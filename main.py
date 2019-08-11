@@ -126,7 +126,7 @@ def set_location(bot, update):
         update.message.reply_text("請重新輸入！")
     else:
         update.message.reply_text('目前我們只支持台灣喔！還是您是要...', reply_markup=InlineKeyboardMarkup([[
-            InlineKeyboardButton(random.choice(emoji)+ ' ' + locate, callback_data='set-'+locate+'-userid') for locate in possiple_list
+            InlineKeyboardButton(random.choice(emoji)+ ' ' + locate, callback_data='set-'+locate+'-'+str(userid)) for locate in possiple_list
         ]]))
 
 
@@ -159,7 +159,7 @@ def callback_query_handler(bot, update):
             InlineKeyboardButton(time, callback_data='{}-{}'.format(index, callback_data[1])) for index, time in button_map['1']
         ]]))
     elif callback_data[0] == 'set':
-        user_location[callback_data[2]] = callback_data[1]
+        user_location[int(callback_data[2])] = callback_data[1]
         update.callback_query.edit_message_text('已更變居住區域: ' + callback_data[1])
         print(user_location)
     else:
