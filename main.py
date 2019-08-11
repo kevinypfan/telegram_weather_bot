@@ -37,7 +37,6 @@ def request_choose(locate, day):
 
 
 def get_request(locate, update):
-    print('here')
     request = [1, 1, 1, 1, 1]
     result = weather_api.get_data(locate, request)
     start_time = result[0]['startTime']
@@ -88,6 +87,7 @@ def set_notify(bot, update):
     print(time)
     if int(time[:2]) >= 0 and int(time[:2]) <= 23 and int(time[3:]) >= 0 and int(time[3:]) < 60:
         location = user_location[userid]
+
         update.message.reply_text('你的居住地爲'+location+', 設定通知時間爲'+time)
         sche_thread.append(threading.Thread(
             target=schedule, args=(location, update, time,)))
@@ -120,6 +120,7 @@ def set_location(bot, update):
     userid = update.message.from_user.id
     if len(possiple_list) == 1:
         user_location[userid] = possiple_list[0]
+        print(user_location)
         update.message.reply_text('已更變居住區域: ' + possiple_list[0])
     elif len(possiple_list) > 5:
         update.message.reply_text("請重新輸入！")
@@ -135,7 +136,6 @@ def location_handler(bot, update):
     latlng = (update['message']['location']
               ['latitude'], update['message']['location']['longitude'])
     locate = search_area(latlng)
-    print(locate)
     if locate == None:
         update.message.reply_text('目前本系統只支援台灣喔！')
     else:
@@ -161,6 +161,7 @@ def callback_query_handler(bot, update):
     elif callback_data[0] == 'set':
         user_location[callback_data[2]] = callback_data[1]
         update.callback_query.edit_message_text('已更變居住區域: ' + callback_data[1])
+        print(user_location)
     else:
         update.callback_query.edit_message_text(
             request_choose(callback_data[1], int(callback_data[0])))
