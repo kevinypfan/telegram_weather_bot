@@ -123,7 +123,7 @@ def meow_handler(bot,update):
     photos = ['https://i.imgur.com/bYLtKnH.jpg','https://i.imgur.com/vD2BIwP.jpg','https://i.imgur.com/4EscGMW.jpg', 'https://i.imgur.com/e6ZLwtM.jpg','https://i.imgur.com/VyYkZHz.jpg','https://i.imgur.com/mRzIERX.jpg','https://i.imgur.com/wJi74LE.jpg' ]
     update.message.reply_photo(random.choice(photos))
 
-updater = Updater('936215806:AAEbl8MOVWGTW5AONbDWLSkiQQfRFwNKm6g')
+updater = Updater('ADD_YOUR_KEY')
 updater.dispatcher.add_handler(
     MessageHandler(Filters.location, location_handler))
 updater.dispatcher.add_handler(CallbackQueryHandler(callback_query_handler))
