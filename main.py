@@ -7,6 +7,7 @@ from valid import check_input
 import random
 import threading
 import weather_api
+from config import BOT_TOKEN
 all_type_list = {}
 type_list = ['基隆市', '臺北市', '新北市', '桃園縣', '新竹市', '新竹縣', '苗栗縣', '臺中市', '彰化縣', '南投縣',
              '雲林縣', '嘉義市', '嘉義縣', '臺南市', '高雄市', '屏東縣', '臺東縣', '花蓮縣', '宜蘭縣', '澎湖縣', '金門縣', '連江縣']
@@ -123,7 +124,7 @@ def meow_handler(bot,update):
     photos = ['https://i.imgur.com/bYLtKnH.jpg','https://i.imgur.com/vD2BIwP.jpg','https://i.imgur.com/4EscGMW.jpg', 'https://i.imgur.com/e6ZLwtM.jpg','https://i.imgur.com/VyYkZHz.jpg','https://i.imgur.com/mRzIERX.jpg','https://i.imgur.com/wJi74LE.jpg' ]
     update.message.reply_photo(random.choice(photos))
 
-updater = Updater('ADD_YOUR_KEY')
+updater = Updater(BOT_TOKEN)
 updater.dispatcher.add_handler(
     MessageHandler(Filters.location, location_handler))
 updater.dispatcher.add_handler(CallbackQueryHandler(callback_query_handler))

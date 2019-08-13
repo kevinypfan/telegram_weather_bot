@@ -1,4 +1,5 @@
 import googlemaps
+from config import GOOGLE_API_KEY
 
 
 latlngs = [(22.953177, 121.129813), (23.002835, 120.203139), (24.940991, 121.241919), (24.151393, 120.632390),
@@ -10,7 +11,7 @@ def search_area(latlng):
             "高雄市", "基隆市", "新竹縣", "新竹市", "苗栗縣", "彰化縣", "南投縣", "雲林縣", "嘉義縣", "嘉義市", "屏東縣"}
     map_dict = {'台北市': "臺北市", '台南市': "臺南市", '台東縣': "臺東縣", '台中市': "臺中市"}
     area_simple = {'台北市', '台南市', '台東縣', '台中市'}
-    gmaps = googlemaps.Client(key='YOUR_GOOGLE_API_KEY')
+    gmaps = googlemaps.Client(key=GOOGLE_API_KEY)
     reverse_geocode_result = gmaps.reverse_geocode(
         latlng=latlng, language='zh-tw')
     set_data = set()
